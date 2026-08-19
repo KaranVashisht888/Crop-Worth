@@ -1,0 +1,25 @@
+services:
+  - name: farmermarket-api
+    type: web
+    runtime: node
+    plan: free
+    region: singapore
+    rootDir: apps/server
+    buildCommand: npm install && npx prisma migrate deploy && npx prisma db seed
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_ACCESS_EXPIRES_IN
+        value: 15m
+      - key: JWT_REFRESH_EXPIRES_IN
+        value: 7d
+      # Set in the Render dashboard when applying this blueprint:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_ACCESS_SECRET
+        sync: false
+      - key: JWT_REFRESH_SECRET
+        sync: false
+      - key: CLIENT_ORIGIN
+        sync: false

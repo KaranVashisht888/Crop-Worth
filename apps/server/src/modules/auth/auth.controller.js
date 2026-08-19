@@ -2,10 +2,16 @@ import { registerUser, loginUser, refreshSession, logoutSession } from "./auth.s
 import { asyncHandler } from "../../utils/asyncHandler.js";
 
 const REFRESH_COOKIE = "refreshToken";
+const isProduction = process.env.NODE_ENV === "production";
 const REFRESH_COOKIE_OPTS = {
   httpOnly: true,
-  sameSite: "lax",
-  secure: process.env.NODE_ENV === "production",
+  // Frontend and backend live on different origins in production (e.g.
+  // vercel.app / onrender.com), so the cookie must be SameSite=None to
+  // survive cross-site fetch/XHR - Lax only survives top-level navigation.
+  // None requires Secure, which is only meaningful (and available) over
+  // HTTPS in production; localhost dev stays Lax/non-secure.
+  sameSite: isProduction ? "none" : "lax",
+  secure: isProduction,
   path: "/api/auth",
 };
 
@@ -33,6 +39,6 @@ export const refresh = asyncHandler(async (req, res) => {
 
 export const logout = asyncHandler(async (req, res) => {
   await logoutSession(req.cookies?.[REFRESH_COOKIE]);
-  res.clearCookie(REFRESH_COOKIE, { path: "/api/auth" });
+  res.clearCookie(REFRESH_COOKIE, REFRESH_COOKIE_OPTS);
   res.status(204).send();
 });

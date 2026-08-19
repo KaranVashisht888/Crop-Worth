@@ -99,8 +99,42 @@ live external call. Two ways to populate it:
   `source: "seed-data (placeholder...)"` so they're never mistaken for real
   data.
 
-## Status
+## Deployment
 
-Work in progress — see commit history for feature-by-feature build order:
-auth → listings → bidding/WebSockets → scraper → advisory tips → i18n →
-dashboards.
+- **Database**: [Neon](https://neon.tech) (serverless Postgres, free tier
+  never expires — unlike most free-tier Postgres offerings, which is why
+  it's the pick here over the hosting provider's own database).
+- **API + WebSocket server**: [Render](https://render.com), driven by the
+  `render.yaml` Blueprint at the repo root. Render's free web service tier
+  does support WebSocket connections (verified against their docs before
+  picking it — plenty of "free tier" comparisons online claim otherwise and
+  are wrong or outdated). It does spin down after 15 minutes idle and takes
+  ~30-60s to wake on the next request — normal free-tier behavior, worth
+  mentioning up front in a live demo.
+- **Frontend**: [Vercel](https://vercel.com), root directory `apps/client`.
+  `vercel.json` adds the SPA rewrite React Router needs (Vercel's Vite
+  preset doesn't add this automatically).
+- **Scraper**: unchanged — GitHub Actions cron, pointed at the same Neon
+  `DATABASE_URL` via a repo secret.
+
+**Known limitation**: listing photo uploads use local disk storage
+(`apps/server/uploads/`, via Multer), per the project's original scope (no
+external storage service). Render's free tier has an ephemeral filesystem,
+so uploaded photos are lost on restart/redeploy. In a production build
+this would swap the storage adapter for S3-compatible object storage; kept
+local here deliberately, matching the project's stated constraints.
+
+**Order of operations** (there's a real dependency chain — the backend
+needs to exist before the frontend can point at it, and the backend's CORS
+config needs the frontend's final URL):
+1. Create the Neon project, copy its connection string.
+2. In Render, "New Blueprint Instance" → connect this repo → it reads
+   `render.yaml` → fill in `DATABASE_URL` (from Neon), `JWT_ACCESS_SECRET`,
+   `JWT_REFRESH_SECRET` (long random strings — not the dev placeholders),
+   and a placeholder `CLIENT_ORIGIN` for now.
+3. Once the Render service is live, copy its URL.
+4. In Vercel, import the repo, set root directory to `apps/client`, add
+   env var `VITE_API_URL` = `https://<render-url>/api`.
+5. Copy the resulting Vercel URL back into Render's `CLIENT_ORIGIN` env var
+   and redeploy the backend so CORS and the refresh-token cookie's
+   cross-site settings match the real frontend origin.
