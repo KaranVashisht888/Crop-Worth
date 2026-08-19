@@ -60,6 +60,15 @@ npm install
 npm run dev
 ```
 
+## Tests
+
+`npm test` from `apps/server` (Node's built-in test runner, no extra
+dependency). Unit tests for the pure business logic that actually matters:
+the strictly-ascending bid rule, the below-reserve flag, buyer reliability
+scoring, and every request validator - not database integration tests, since
+those pure functions are where the interesting edge cases (equal bid amounts,
+empty resolution history, boundary reserve prices) actually live.
+
 ## Local Postgres without Docker
 
 If Docker isn't available, use the portable PostgreSQL binaries instead of

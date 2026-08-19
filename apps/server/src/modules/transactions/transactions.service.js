@@ -1,4 +1,5 @@
 import { prisma } from "../../config/prisma.js";
+import { calculateReliabilityScore } from "./reliabilityScore.js";
 
 export async function listMyTransactions(userId, role) {
   const where = role === "FARMER" ? { farmerId: userId } : { buyerId: userId };
@@ -33,21 +34,16 @@ export async function resolveTransaction(id, userId, status) {
   return updated;
 }
 
-// score = share of this buyer's resolved (accepted-bid) transactions that
-// were actually completed, rather than falling through.
 async function recomputeReliabilityScore(buyerId) {
   const resolved = await prisma.transaction.findMany({
     where: { buyerId, status: { in: ["COMPLETED", "FELL_THROUGH"] } },
     select: { status: true },
   });
 
-  if (resolved.length === 0) return;
+  const score = calculateReliabilityScore(resolved.map((t) => t.status));
+  if (score === null) return;
 
-  const completed = resolved.filter((t) => t.status === "COMPLETED").length;
-  await prisma.user.update({
-    where: { id: buyerId },
-    data: { reliabilityScore: completed / resolved.length },
-  });
+  await prisma.user.update({ where: { id: buyerId }, data: { reliabilityScore: score } });
 }
 
 function httpError(status, message) {

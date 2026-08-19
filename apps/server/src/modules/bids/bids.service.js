@@ -1,5 +1,6 @@
 import { prisma } from "../../config/prisma.js";
 import { emitToListing } from "../../sockets/emitter.js";
+import { isValidNextBid, isBelowReserve } from "./bidRules.js";
 
 const BUYER_SELECT = { id: true, name: true, reliabilityScore: true };
 
@@ -15,7 +16,7 @@ export async function placeBid(listingId, buyerId, amount) {
     orderBy: { amount: "desc" },
   });
 
-  if (highest && amount <= highest.amount) {
+  if (!isValidNextBid(amount, highest?.amount)) {
     throw httpError(409, `Bid must exceed the current highest bid of ${highest.amount}`);
   }
 
@@ -96,7 +97,7 @@ export async function acceptBid(bidId, farmerId) {
 }
 
 function serializeBid(bid, reservePrice) {
-  return { ...bid, belowReserve: bid.amount < reservePrice };
+  return { ...bid, belowReserve: isBelowReserve(bid.amount, reservePrice) };
 }
 
 function httpError(status, message) {
