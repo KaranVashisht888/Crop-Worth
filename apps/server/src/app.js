@@ -19,6 +19,16 @@ export function createApp() {
   const app = express();
   app.disable("x-powered-by");
 
+  // Render sits the app behind exactly 2 proxy hops (confirmed by
+  // inspecting a live X-Forwarded-For chain: client, Cloudflare, then
+  // Render's own internal LB) - without this, Express falls back to the
+  // proxy's own socket address for every request, so express-rate-limit
+  // ends up grouping every visitor behind Render into one shared bucket
+  // instead of limiting per real client.
+  if (process.env.NODE_ENV === "production") {
+    app.set("trust proxy", 2);
+  }
+
   app.use(
     helmet({
       // This backend serves JSON + static images, never HTML, so CSP is
@@ -35,13 +45,7 @@ export function createApp() {
   app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 
   app.get("/api/health", (req, res) => {
-    res.json({
-      status: "ok",
-      // TEMPORARY diagnostic for the Render proxy-chain investigation -
-      // remove once trust proxy is set correctly.
-      xForwardedFor: req.headers["x-forwarded-for"] || null,
-      socketRemoteAddress: req.socket.remoteAddress,
-    });
+    res.json({ status: "ok" });
   });
 
   app.use("/api/auth", authRoutes);
