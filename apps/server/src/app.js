@@ -35,7 +35,13 @@ export function createApp() {
   app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 
   app.get("/api/health", (req, res) => {
-    res.json({ status: "ok" });
+    res.json({
+      status: "ok",
+      // TEMPORARY diagnostic for the Render proxy-chain investigation -
+      // remove once trust proxy is set correctly.
+      xForwardedFor: req.headers["x-forwarded-for"] || null,
+      socketRemoteAddress: req.socket.remoteAddress,
+    });
   });
 
   app.use("/api/auth", authRoutes);
