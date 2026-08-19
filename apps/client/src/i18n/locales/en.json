@@ -1,3 +1,95 @@
 {
-  "appName": "Farmer Market"
+  "appName": "Farmer Market",
+  "common": {
+    "loading": "Loading..."
+  },
+  "nav": {
+    "myListings": "My Listings",
+    "browseListings": "Browse Listings",
+    "myBids": "My Bids",
+    "transactions": "Transactions",
+    "advisory": "Advisory",
+    "logout": "Logout"
+  },
+  "role": {
+    "FARMER": "Farmer",
+    "BUYER": "Buyer"
+  },
+  "auth": {
+    "login": "Log in",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "name": "Full name",
+    "region": "Region",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "loginFailed": "Login failed. Check your email and password.",
+    "registerFailed": "Registration failed."
+  },
+  "listing": {
+    "reserve": "Reserve",
+    "expected": "Expected",
+    "bidCount": "{{count}} bid",
+    "bidCount_other": "{{count}} bids",
+    "ended": "Auction ended",
+    "endsAt": "Ends {{date}}",
+    "createNew": "Create listing",
+    "filterCrop": "Crop",
+    "filterRegion": "Region",
+    "search": "Search",
+    "none": "No listings found.",
+    "loadError": "Could not load listings.",
+    "cropType": "Crop type",
+    "variety": "Variety (optional)",
+    "quantity": "Quantity",
+    "region": "Region",
+    "harvestDate": "Harvest date",
+    "auctionEnd": "Auction ends",
+    "photo": "Photo (optional)",
+    "createFailed": "Could not create listing.",
+    "by": "by",
+    "expiredPrompt": "No bid cleared the reserve price before the auction closed. Consider relisting, optionally at a lower reserve."
+  },
+  "bid": {
+    "mustExceed": "Bid must exceed the current highest bid of ₹{{amount}}.",
+    "placeFailed": "Could not place bid.",
+    "accepted": "Bid accepted.",
+    "acceptFailed": "Could not accept bid.",
+    "history": "Bid history",
+    "none": "No bids yet.",
+    "belowReserve": "Below reserve",
+    "reliability": "reliability",
+    "yours": "Your bid",
+    "accept": "Accept",
+    "place": "Place bid",
+    "amountPlaceholder": "More than ₹{{amount}}"
+  },
+  "status": {
+    "ACTIVE": "Active",
+    "CLOSED": "Closed",
+    "EXPIRED": "Expired",
+    "ACCEPTED": "Accepted",
+    "PENDING": "Pending",
+    "OUTBID": "Outbid",
+    "REJECTED": "Rejected",
+    "PENDING_FULFILLMENT": "Pending fulfillment",
+    "COMPLETED": "Completed",
+    "FELL_THROUGH": "Fell through"
+  },
+  "transaction": {
+    "none": "No transactions yet.",
+    "markCompleted": "Mark completed",
+    "markFellThrough": "Mark fell through"
+  },
+  "prices": {
+    "title": "Reference price - {{crop}}",
+    "loading": "Loading prices...",
+    "error": "Could not load prices.",
+    "none": "No reference price available yet."
+  },
+  "advisory": {
+    "loading": "Loading tips...",
+    "none": "No advisory tips available for this crop yet."
+  }
 }

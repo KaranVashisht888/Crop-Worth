@@ -1,3 +1,95 @@
 {
-  "appName": "किसान बाज़ार"
+  "appName": "किसान बाज़ार",
+  "common": {
+    "loading": "लोड हो रहा है..."
+  },
+  "nav": {
+    "myListings": "मेरी फ़सलें",
+    "browseListings": "फ़सलें देखें",
+    "myBids": "मेरी बोलियाँ",
+    "transactions": "लेन-देन",
+    "advisory": "सलाह",
+    "logout": "लॉग आउट"
+  },
+  "role": {
+    "FARMER": "किसान",
+    "BUYER": "खरीदार"
+  },
+  "auth": {
+    "login": "लॉग इन करें",
+    "register": "पंजीकरण करें",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "name": "पूरा नाम",
+    "region": "क्षेत्र",
+    "noAccount": "खाता नहीं है?",
+    "haveAccount": "पहले से खाता है?",
+    "loginFailed": "लॉगिन विफल। अपना ईमेल और पासवर्ड जांचें।",
+    "registerFailed": "पंजीकरण विफल।"
+  },
+  "listing": {
+    "reserve": "न्यूनतम मूल्य",
+    "expected": "अपेक्षित मूल्य",
+    "bidCount": "{{count}} बोली",
+    "bidCount_other": "{{count}} बोलियाँ",
+    "ended": "नीलामी समाप्त",
+    "endsAt": "समाप्ति: {{date}}",
+    "createNew": "नई फ़सल सूची बनाएँ",
+    "filterCrop": "फ़सल",
+    "filterRegion": "क्षेत्र",
+    "search": "खोजें",
+    "none": "कोई फ़सल सूची नहीं मिली।",
+    "loadError": "फ़सल सूचियाँ लोड नहीं हो सकीं।",
+    "cropType": "फ़सल का प्रकार",
+    "variety": "किस्म (वैकल्पिक)",
+    "quantity": "मात्रा",
+    "region": "क्षेत्र",
+    "harvestDate": "फसल कटाई की तारीख",
+    "auctionEnd": "नीलामी समाप्ति समय",
+    "photo": "फोटो (वैकल्पिक)",
+    "createFailed": "फ़सल सूची नहीं बन सकी।",
+    "by": "द्वारा",
+    "expiredPrompt": "नीलामी बंद होने तक कोई बोली न्यूनतम मूल्य तक नहीं पहुँची। कम न्यूनतम मूल्य के साथ फिर से सूचीबद्ध करने पर विचार करें।"
+  },
+  "bid": {
+    "mustExceed": "बोली मौजूदा सबसे ऊँची बोली ₹{{amount}} से अधिक होनी चाहिए।",
+    "placeFailed": "बोली नहीं लगाई जा सकी।",
+    "accepted": "बोली स्वीकार की गई।",
+    "acceptFailed": "बोली स्वीकार नहीं की जा सकी।",
+    "history": "बोली इतिहास",
+    "none": "अभी तक कोई बोली नहीं।",
+    "belowReserve": "न्यूनतम मूल्य से कम",
+    "reliability": "विश्वसनीयता",
+    "yours": "आपकी बोली",
+    "accept": "स्वीकार करें",
+    "place": "बोली लगाएँ",
+    "amountPlaceholder": "₹{{amount}} से अधिक"
+  },
+  "status": {
+    "ACTIVE": "सक्रिय",
+    "CLOSED": "बंद",
+    "EXPIRED": "समाप्त",
+    "ACCEPTED": "स्वीकृत",
+    "PENDING": "लंबित",
+    "OUTBID": "पीछे",
+    "REJECTED": "अस्वीकृत",
+    "PENDING_FULFILLMENT": "पूर्ति लंबित",
+    "COMPLETED": "पूर्ण",
+    "FELL_THROUGH": "असफल"
+  },
+  "transaction": {
+    "none": "अभी तक कोई लेन-देन नहीं।",
+    "markCompleted": "पूर्ण के रूप में चिह्नित करें",
+    "markFellThrough": "असफल के रूप में चिह्नित करें"
+  },
+  "prices": {
+    "title": "संदर्भ मूल्य - {{crop}}",
+    "loading": "मूल्य लोड हो रहे हैं...",
+    "error": "मूल्य लोड नहीं हो सके।",
+    "none": "अभी तक कोई संदर्भ मूल्य उपलब्ध नहीं है।"
+  },
+  "advisory": {
+    "loading": "सलाह लोड हो रही है...",
+    "none": "इस फ़सल के लिए अभी तक कोई सलाह उपलब्ध नहीं है।"
+  }
 }

@@ -8,7 +8,12 @@ export const create = asyncHandler(async (req, res) => {
 });
 
 export const list = asyncHandler(async (req, res) => {
-  const result = await listingsService.listListings(req.query);
+  const mine = req.query.mine === "true";
+  const result = await listingsService.listListings({
+    ...req.query,
+    mine,
+    farmerId: mine ? req.user.id : undefined,
+  });
   res.json(result);
 });
 

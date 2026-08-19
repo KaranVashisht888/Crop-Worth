@@ -20,8 +20,11 @@ export async function createListing(farmerId, data) {
   });
 }
 
-export async function listListings({ crop, region, status, page, limit }) {
-  const where = { status: status || "ACTIVE" };
+export async function listListings({ crop, region, status, page, limit, mine, farmerId }) {
+  // "mine" (a farmer's own dashboard) needs every status, not just ACTIVE -
+  // the default below only applies to buyers browsing the open market.
+  const where = mine ? { farmerId } : { status: status || "ACTIVE" };
+  if (mine && status) where.status = status;
   if (crop) where.cropType = { equals: crop, mode: "insensitive" };
   if (region) where.region = { equals: region, mode: "insensitive" };
 
