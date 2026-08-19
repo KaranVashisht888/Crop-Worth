@@ -25,6 +25,9 @@ apps/server/uploads/*
 # Prisma
 apps/server/prisma/*.db
 
+# Local portable Postgres (see README - Docker-free dev DB fallback)
+.tools/
+
 # Editor / OS
 .vscode/
 .idea/

@@ -53,6 +53,26 @@ npm install
 npm run dev
 ```
 
+## Local Postgres without Docker
+
+If Docker isn't available, use the portable PostgreSQL binaries instead of
+`docker compose`:
+
+```bash
+# One-time setup
+mkdir .tools
+curl -L -o .tools/postgres.zip https://get.enterprisedb.com/postgresql/postgresql-16.15-1-windows-x64-binaries.zip
+# extract to .tools/pgsql, then:
+.tools/pgsql/bin/initdb -D .tools/pgdata -U farmermarket -A trust --encoding=UTF8
+.tools/pgsql/bin/pg_ctl -D .tools/pgdata -l .tools/pg.log -o "-p 5433" start
+.tools/pgsql/bin/createdb -U farmermarket -h 127.0.0.1 -p 5433 farmermarket
+.tools/pgsql/bin/psql -U farmermarket -h 127.0.0.1 -p 5433 -d farmermarket -c "ALTER ROLE farmermarket WITH PASSWORD 'farmermarket';"
+```
+
+Then in `apps/server/.env`, point `DATABASE_URL` at port `5433` instead of
+`5432`. `.tools/` is git-ignored — it's a local dev convenience, not part of
+the deployable app. To stop the DB: `.tools/pgsql/bin/pg_ctl -D .tools/pgdata stop`.
+
 ## Status
 
 Work in progress — see commit history for feature-by-feature build order:
