@@ -1,7 +1,14 @@
 {
   "name": "farmermarket-client",
   "version": "0.1.0",
+  "description": "React frontend for the farmer-buyer produce marketplace",
   "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KaranVashisht888/Mainproject2.git",
+    "directory": "apps/client"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",
