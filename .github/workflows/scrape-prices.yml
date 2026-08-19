@@ -1,9 +1,14 @@
 name: Scrape mandi prices
 
 on:
-  schedule:
-    # 09:00 and 21:00 IST (03:30 and 15:30 UTC)
-    - cron: "30 3,15 * * *"
+  # Schedule paused: needs DATA_GOV_IN_API_KEY and DATABASE_URL added as repo
+  # secrets first (see README "Market price data"), or this just fails
+  # twice a day and emails you about it. Re-enable by uncommenting below
+  # once those are set. Doesn't affect the live app either way - it only
+  # ever reads whatever's already in PriceSnapshot.
+  # schedule:
+  #   # 09:00 and 21:00 IST (03:30 and 15:30 UTC)
+  #   - cron: "30 3,15 * * *"
   workflow_dispatch: {}
 
 jobs:
