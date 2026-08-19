@@ -1,5 +1,12 @@
 # Mainproject2 — Farmer-Buyer Produce Marketplace
 
+**Live**: [mainproject2-ten.vercel.app](https://mainproject2-ten.vercel.app)
+(API: [farmermarket-api-msm2.onrender.com](https://farmermarket-api-msm2.onrender.com))
+
+> The API is on Render's free tier, which spins down after 15 minutes idle —
+> the first request after a quiet period can take 30-60s to wake it up.
+> That's expected, not a bug.
+
 A live-bidding marketplace connecting farmers directly to intermediary buyers.
 Farmers list crops with a reserve price; buyers place open, real-time bids
 within a time-boxed auction window; farmers accept whichever bid they trust,
