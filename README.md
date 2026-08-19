@@ -73,6 +73,32 @@ Then in `apps/server/.env`, point `DATABASE_URL` at port `5433` instead of
 `5432`. `.tools/` is git-ignored — it's a local dev convenience, not part of
 the deployable app. To stop the DB: `.tools/pgsql/bin/pg_ctl -D .tools/pgdata stop`.
 
+## Market price data
+
+`GET /api/prices` reads from the local `PriceSnapshot` table only - never a
+live external call. Two ways to populate it:
+
+- **Real data** (`scraper/scrape_agmarknet.py`): pulls from data.gov.in's
+  official mandi price API. Needs a free `DATA_GOV_IN_API_KEY` - register at
+  data.gov.in (My Account → API Keys), then run:
+  ```bash
+  cd scraper
+  python -m venv .venv && .venv/Scripts/activate  # or source .venv/bin/activate
+  pip install -r requirements.txt
+  cp .env.example .env  # fill in DATABASE_URL and DATA_GOV_IN_API_KEY
+  python scrape_agmarknet.py
+  ```
+  Agmarknet's own site (agmarknet.gov.in) now requires solving a CAPTCHA for
+  automated requests, which this project won't attempt to bypass - hence
+  going through data.gov.in's sanctioned API instead, which serves the same
+  underlying data.
+
+- **Placeholder seed data** (no key needed, for demos): `npm run db:seed`
+  from `apps/server` inserts realistic reference prices for the crops this
+  marketplace lists. Rows are clearly labeled
+  `source: "seed-data (placeholder...)"` so they're never mistaken for real
+  data.
+
 ## Status
 
 Work in progress — see commit history for feature-by-feature build order:
