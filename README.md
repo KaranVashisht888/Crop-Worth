@@ -106,6 +106,31 @@ live external call. Two ways to populate it:
   `source: "seed-data (placeholder...)"` so they're never mistaken for real
   data.
 
+## Security notes
+
+- `helmet` for baseline security headers, `express-rate-limit` on
+  `/api/auth/login` and `/api/auth/register` (20 requests / 15 min per IP) -
+  the two endpoints actually worth guarding against brute-force/credential
+  stuffing, since everything else already requires a valid access token or
+  refresh cookie.
+- All substantive actions (listings, bids, transactions) authenticate via a
+  `Bearer` access token in a header, not a cookie - browsers don't attach
+  headers automatically the way they do cookies, so these routes are immune
+  to CSRF by construction. Only `/api/auth/refresh` and `/logout` rely on
+  the cookie alone; a forged cross-site call to `/refresh` can't leak
+  anything back to an attacker (CORS still restricts which origins can read
+  the response), so the blast radius is limited to harmless token rotation.
+- `npm audit` flags 4 findings across the two apps; none apply to this app's
+  actual usage. `tar` (critical, via `bcrypt`'s install-time build tooling)
+  only runs during `npm install`, never in a request path. `esbuild`
+  (moderate, via `vite`) is a dev-server-only CVE, inert in the deployed
+  static build. `react-router`'s two CVEs require either attacker-controlled
+  navigation targets (every `Link`/`navigate` call in this app targets a
+  static route or our own API's UUIDs, never raw user input) or SSR
+  hydration (this is a client-only SPA - no SSR). Forcing the breaking
+  major-version bumps `npm audit fix --force` wants would trade a real,
+  working, tested app for closing gaps that don't reach this codebase.
+
 ## Deployment
 
 - **Database**: [Neon](https://neon.tech) (serverless Postgres, free tier

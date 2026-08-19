@@ -2,6 +2,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import express from "express";
 import cors from "cors";
+import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import authRoutes from "./modules/auth/auth.routes.js";
 import listingsRoutes from "./modules/listings/listings.routes.js";
@@ -16,7 +17,18 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export function createApp() {
   const app = express();
+  app.disable("x-powered-by");
 
+  app.use(
+    helmet({
+      // This backend serves JSON + static images, never HTML, so CSP is
+      // inert here - what actually matters is CORP, which defaults to
+      // same-origin and would otherwise block the frontend (a different
+      // origin) from loading listing photos out of /uploads.
+      contentSecurityPolicy: false,
+      crossOriginResourcePolicy: { policy: "cross-origin" },
+    })
+  );
   app.use(cors({ origin: process.env.CLIENT_ORIGIN, credentials: true }));
   app.use(express.json());
   app.use(cookieParser());
