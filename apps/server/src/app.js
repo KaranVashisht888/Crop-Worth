@@ -7,6 +7,7 @@ import authRoutes from "./modules/auth/auth.routes.js";
 import listingsRoutes from "./modules/listings/listings.routes.js";
 import bidsRoutes from "./modules/bids/bids.routes.js";
 import transactionsRoutes from "./modules/transactions/transactions.routes.js";
+import pricesRoutes from "./modules/prices/prices.routes.js";
 import { authenticate } from "./middleware/authenticate.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
@@ -28,6 +29,7 @@ export function createApp() {
   app.use("/api/listings", listingsRoutes);
   app.use("/api/bids", bidsRoutes);
   app.use("/api/transactions", transactionsRoutes);
+  app.use("/api/prices", pricesRoutes);
 
   // Temporary smoke-test route for the auth middleware chain; superseded by
   // real profile/dashboard routes in a later feature.
