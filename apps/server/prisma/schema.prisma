@@ -1,0 +1,160 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  FARMER
+  BUYER
+}
+
+enum ListingStatus {
+  ACTIVE
+  CLOSED
+  EXPIRED
+  ACCEPTED
+}
+
+enum BidStatus {
+  PENDING
+  OUTBID
+  ACCEPTED
+  REJECTED
+}
+
+enum TransactionStatus {
+  PENDING_FULFILLMENT
+  COMPLETED
+  FELL_THROUGH
+}
+
+model User {
+  id                String   @id @default(uuid())
+  email             String   @unique
+  passwordHash      String
+  role              Role
+  name              String
+  phone             String?
+  region            String?
+  preferredLanguage String   @default("en")
+
+  // Cached, recomputed whenever one of this buyer's transactions resolves.
+  reliabilityScore  Float?
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  listings          Listing[]      @relation("FarmerListings")
+  bids              Bid[]          @relation("BuyerBids")
+  refreshTokens     RefreshToken[]
+
+  transactionsAsFarmer Transaction[] @relation("FarmerTransactions")
+  transactionsAsBuyer  Transaction[] @relation("BuyerTransactions")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Listing {
+  id            String        @id @default(uuid())
+  farmerId      String
+  farmer        User          @relation("FarmerListings", fields: [farmerId], references: [id])
+
+  cropType      String
+  variety       String?
+  quantity      Float
+  unit          String
+  expectedPrice Float
+  reservePrice  Float
+  region        String
+  harvestDate   DateTime
+  photoUrl      String?
+
+  auctionStart  DateTime      @default(now())
+  auctionEnd    DateTime
+  status        ListingStatus @default(ACTIVE)
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  bids          Bid[]
+  transaction   Transaction?
+
+  @@index([cropType, region, status])
+}
+
+model Bid {
+  id         String    @id @default(uuid())
+  listingId  String
+  listing    Listing   @relation(fields: [listingId], references: [id])
+  buyerId    String
+  buyer      User      @relation("BuyerBids", fields: [buyerId], references: [id])
+
+  amount     Float
+  status     BidStatus @default(PENDING)
+
+  createdAt  DateTime  @default(now())
+
+  transaction Transaction?
+
+  @@index([listingId])
+  @@index([buyerId])
+}
+
+model Transaction {
+  id           String             @id @default(uuid())
+  listingId    String             @unique
+  listing      Listing            @relation(fields: [listingId], references: [id])
+  bidId        String             @unique
+  bid          Bid                @relation(fields: [bidId], references: [id])
+
+  farmerId     String
+  farmer       User               @relation("FarmerTransactions", fields: [farmerId], references: [id])
+  buyerId      String
+  buyer        User               @relation("BuyerTransactions", fields: [buyerId], references: [id])
+
+  finalAmount  Float
+  status       TransactionStatus  @default(PENDING_FULFILLMENT)
+
+  createdAt    DateTime           @default(now())
+  completedAt  DateTime?
+}
+
+// Populated only by the offline scraper (scraper/scrape_agmarknet.py).
+// The live app never writes here and never fetches this data live.
+model PriceSnapshot {
+  id       String   @id @default(uuid())
+  cropType String
+  region   String
+  price    Float
+  unit     String
+  date     DateTime
+  source   String
+
+  createdAt DateTime @default(now())
+
+  @@index([cropType, region, date])
+}
+
+model AdvisoryTip {
+  id       String  @id @default(uuid())
+  cropType String
+  season   String?
+  title    String
+  body     String
+
+  @@index([cropType])
+}

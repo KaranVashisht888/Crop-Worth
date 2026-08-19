@@ -1,0 +1,32 @@
+
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Env files
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Build artifacts
+apps/client/dist/
+apps/server/dist/
+*.log
+npm-debug.log*
+
+# Uploaded content (keep the folder, ignore contents)
+apps/server/uploads/*
+!apps/server/uploads/.gitkeep
+
+# Prisma
+apps/server/prisma/*.db
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
