@@ -83,6 +83,7 @@
     "markFellThrough": "Mark fell through"
   },
   "prices": {
+    "sidebarTitle": "Reference prices",
     "title": "Reference price - {{crop}}",
     "loading": "Loading prices...",
     "error": "Could not load prices.",
