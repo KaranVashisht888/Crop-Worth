@@ -12,6 +12,13 @@ Farmers list crops with a reserve price; buyers place open, real-time bids
 within a time-boxed auction window; farmers accept whichever bid they trust,
 weighing amount against the buyer's reliability score.
 
+## Screenshots
+
+| | |
+|---|---|
+| ![Browsing active listings](docs/screenshots/browse-listings.png)<br>Buyer browsing active listings | ![A bid arriving live over WebSockets](docs/screenshots/listing-live-bid.png)<br>A bid arriving live, no page refresh |
+| ![Farmer accepting a bid](docs/screenshots/bid-accepted.png)<br>Farmer's view after accepting a bid | ![The advisory page in Hindi](docs/screenshots/hindi-i18n.png)<br>Full UI in Hindi |
+
 ## Why this project
 
 Most student marketplace projects target consumers who already have plenty of
